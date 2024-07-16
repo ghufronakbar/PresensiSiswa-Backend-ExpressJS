@@ -13,10 +13,6 @@
   "prisma": {
     "seed": "node prisma/seed.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ghufronakbar/konek-aplikasi-interaktif-untuk-pemilihan-kepala-desa-umkm-dan-pengaduan-masyarakat-berbasis-web.git"
-  },
   "keywords": [
     "webserver",
     "rest",
@@ -25,17 +21,10 @@
     "js",
     "express",
     "mysql",
-    "desa",
-    "sistem",
-    "informasi",
-    "desa"
+    "presensi"
   ],
   "author": "ghufronakbar",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ghufronakbar/konek-aplikasi-interaktif-untuk-pemilihan-kepala-desa-umkm-dan-pengaduan-masyarakat-berbasis-web/issues"
-  },
-  "homepage": "https://github.com/ghufronakbar/konek-aplikasi-interaktif-untuk-pemilihan-kepala-desa-umkm-dan-pengaduan-masyarakat-berbasis-web#readme",
   "dependencies": {
     "@prisma/client": "^5.15.1",
     "body-parser": "^1.20.2",

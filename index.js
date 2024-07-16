@@ -18,8 +18,6 @@ app.use('/admin', require('./routes/admin'));
 app.use('/petugas', require('./routes/petugas'));
 
 
-
 app.listen(process.env.PORT, () => {
-    console.log(`Server started on port ${process.env.PORT}`);
-    console.log(process.env.BASE_URL)
+    console.log(`⚡Server started on port ${process.env.PORT} ⚡`);    
 });
