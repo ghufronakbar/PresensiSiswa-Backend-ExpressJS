@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const adminVerification = (req, res, next) => {
+const petugasVerification = (req, res, next) => {
   let token = req.headers["authorization"];
   
   if (token) {    
@@ -18,9 +18,10 @@ const adminVerification = (req, res, next) => {
           return res.status(401).send({ auth: false, message: "Sesi telah kadaluarsa!" });
         }
 
-        if(!decoded.idAdmin){
-          return res.status(401).send({ auth: false, message: "Anda bukan admin" });
+        if(!decoded.idPetugas){
+          return res.status(401).send({ auth: false, message: "Anda bukan petugas" });
         }
+        
         req.decoded = decoded; // Menyimpan data decoded ke dalam req untuk penggunaan selanjutnya
 
         next(); // Lanjutkan ke middleware/route selanjutnya
@@ -31,4 +32,4 @@ const adminVerification = (req, res, next) => {
   }
 }
 
-module.exports = adminVerification;
+module.exports = petugasVerification;

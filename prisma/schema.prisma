@@ -48,8 +48,8 @@ model Kehadiran {
   waktu       DateTime @default(now())
   tahunAjaran String
   semester    String
-  siswa       Siswa    @relation(fields: [idSiswa], references: [idSiswa])
   idSiswa     String
+  siswa       Siswa    @relation(fields: [idSiswa], references: [idSiswa])
 }
 
 model Petugas {

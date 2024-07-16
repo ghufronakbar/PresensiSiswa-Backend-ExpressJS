@@ -1,4 +1,4 @@
-const primsa = require('../../db/prisma')
+const prisma = require('../../db/prisma')
 
 const showSiswa = async (req, res) => {
     const { page } = req.query
@@ -9,7 +9,7 @@ const showSiswa = async (req, res) => {
             qPage = page
         }
 
-        const getSiswa = await primsa.siswa.findMany({
+        const getSiswa = await prisma.siswa.findMany({
             skip: (qPage - 1) * 10,
             take: 10,
             orderBy: {
@@ -17,10 +17,10 @@ const showSiswa = async (req, res) => {
             },
             where: {
                 isDeleted: false
-            }
+            },
         })
 
-        const pagination = { total_page: Math.ceil(await primsa.siswa.count() / 10), current_page: parseInt(qPage), total_data: await primsa.siswa.count() }
+        const pagination = { total_page: Math.ceil(await prisma.siswa.count() / 10), current_page: parseInt(qPage), total_data: await prisma.siswa.count() }
 
         return res.status(200).json({ status: 200, message: 'Data Siswa', data: getSiswa, pagination })
 
@@ -37,17 +37,17 @@ const createSiswa = async (req, res) => {
         if (!nama) { return res.status(400).json({ status: 400, message: 'Nama harus diisi' }) }
         if (!kelas) { return res.status(400).json({ status: 400, message: 'Kelas harus diisi' }) }
 
-        const validateSiswa = await primsa.siswa.findFirst({
+        const validateSiswa = await prisma.siswa.findFirst({
             where: {
                 idSiswa: idSiswa
             }
         })
 
-        if(validateSiswa && validateSiswa.isDeleted) { return res.status(400).json({ status: 400, message: 'ID siswa pernah terdaftar' }) }
+        if (validateSiswa && validateSiswa.isDeleted) { return res.status(400).json({ status: 400, message: 'ID siswa pernah terdaftar' }) }
 
         if (validateSiswa) { return res.status(400).json({ status: 400, message: 'ID siswa sudah terdaftar' }) }
 
-        const createData = await primsa.siswa.create({
+        const createData = await prisma.siswa.create({
             data: {
                 idSiswa: idSiswa,
                 nama,
@@ -66,10 +66,17 @@ const createSiswa = async (req, res) => {
 const showSiswaId = async (req, res) => {
     const { id } = req.params
     try {
-        const getSiswa = await primsa.siswa.findFirst({
+        const getSiswa = await prisma.siswa.findFirst({
             where: {
                 idSiswa: id,
                 isDeleted: false
+            },
+            include: {
+                kehadiran: {
+                    orderBy: {
+                        waktu: 'desc'
+                    }
+                }
             }
         })
 
@@ -86,7 +93,7 @@ const showSiswaId = async (req, res) => {
 const deleteSiswa = async (req, res) => {
     const { id } = req.params
     try {
-        const getSiswa = await primsa.siswa.findFirst({
+        const getSiswa = await prisma.siswa.findFirst({
             where: {
                 idSiswa: id
             }
@@ -95,7 +102,7 @@ const deleteSiswa = async (req, res) => {
         if (getSiswa && getSiswa.isDeleted === true) { return res.status(404).json({ status: 404, message: 'Siswa sudah dihapus' }) }
         if (!getSiswa) { return res.status(404).json({ status: 404, message: 'Siswa tidak ditemukan' }) }
 
-        await primsa.siswa.update({
+        await prisma.siswa.update({
             where: {
                 idSiswa: id
             },
@@ -120,8 +127,8 @@ const editSiswa = async (req, res) => {
         if (!nama) { return res.status(400).json({ status: 400, message: 'Nama harus diisi' }) }
         if (!kelas) { return res.status(400).json({ status: 400, message: 'Kelas harus diisi' }) }
 
-        
-        const getSiswa = await primsa.siswa.findFirst({
+
+        const getSiswa = await prisma.siswa.findFirst({
             where: {
                 idSiswa: id
             }
@@ -129,20 +136,20 @@ const editSiswa = async (req, res) => {
 
         if (!getSiswa) { return res.status(404).json({ status: 404, message: 'Siswa tidak ditemukan' }) }
 
-        const validateId = await primsa.siswa.findFirst({
+        const validateId = await prisma.siswa.findFirst({
             where: {
-                idSiswa: updatedId,                
+                idSiswa: updatedId,
                 NOT: {
                     idSiswa: id
                 }
-            } 
+            }
         })
         console.log(validateId)
-        
-        if(validateId && validateId.isDeleted === true){return res.status(400).json({ status: 400, message: 'ID siswa pernah terdaftar' })}
-        if(validateId){return res.status(400).json({ status: 400, message: 'ID siswa sudah terdaftar' })}
 
-        await primsa.siswa.update({
+        if (validateId && validateId.isDeleted === true) { return res.status(400).json({ status: 400, message: 'ID siswa pernah terdaftar' }) }
+        if (validateId) { return res.status(400).json({ status: 400, message: 'ID siswa sudah terdaftar' }) }
+
+        await prisma.siswa.update({
             where: {
                 idSiswa: id
             },

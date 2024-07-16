@@ -1,4 +1,4 @@
-const primsa = require('../../db/prisma')
+const prisma = require('../../db/prisma')
 const md5 = require('md5')
 const jwt = require('jsonwebtoken')
 
@@ -7,7 +7,7 @@ const login = async (req, res) => {
     try {
         if (!email || !password) { return res.status(400).json({ status: 400, message: 'Email dan password harus diisi' }) }
 
-        const admin = await primsa.admin.findFirst({
+        const admin = await prisma.admin.findFirst({
             where: {
                 email
             }
@@ -30,7 +30,7 @@ const login = async (req, res) => {
 const profile = async (req, res) => {
     const { idAdmin } = req.decoded
     try {
-        const getProfile = await primsa.admin.findFirst({
+        const getProfile = await prisma.admin.findFirst({
             where: {
                 idAdmin
             }
@@ -52,7 +52,7 @@ const editPassword = async (req, res) => {
 
         if (new_password.length < 8) { return res.status(400).json({ status: 400, message: 'Password minimal 8 karakter' }) }
 
-        const admin = await primsa.admin.findFirst({
+        const admin = await prisma.admin.findFirst({
             where: {
                 idAdmin
             }
@@ -60,7 +60,7 @@ const editPassword = async (req, res) => {
 
         if (admin.password !== md5(old_password)) { return res.status(400).json({ status: 400, message: 'Password lama tidak sesuai' }) }
 
-        await primsa.admin.update({
+        await prisma.admin.update({
             where: {
                 idAdmin
             },

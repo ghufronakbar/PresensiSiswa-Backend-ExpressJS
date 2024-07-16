@@ -1,18 +1,18 @@
-const primsa = require('../../db/prisma')
+const prisma = require('../../db/prisma')
 const md5 = require('md5')
 
 const createPetugas = async (req, res) => {
     const { nama, email } = req.body
     try {
         if (!email || !nama) { return res.status(400).json({ status: 400, message: 'Email dan nama harus diisi' }) }
-        const validatePetugas = await primsa.petugas.findMany({
+        const validatePetugas = await prisma.petugas.findMany({
             where: {
                 email
             }
         })
         if (validatePetugas.length > 0) { return res.status(400).json({ status: 400, message: 'Email sudah terdaftar' }) }
 
-        const validatePetugasInAdmin = await primsa.admin.findMany({
+        const validatePetugasInAdmin = await prisma.admin.findMany({
             where: {
                 email
             }
@@ -20,7 +20,7 @@ const createPetugas = async (req, res) => {
 
         if (validatePetugasInAdmin.length > 0) { return res.status(400).json({ status: 400, message: 'Email sudah terdaftar sebagai admin' }) }
 
-        const createPetugas = await primsa.petugas.create({
+        const createPetugas = await prisma.petugas.create({
             data: {
                 email,
                 password: md5('12345678'),
@@ -39,13 +39,13 @@ const createPetugas = async (req, res) => {
 const deletePetugas = async (req, res) => {
     const { id } = req.params
     try {
-        const validatePetugas = await primsa.petugas.findFirst({
+        const validatePetugas = await prisma.petugas.findFirst({
             where: {
                 idPetugas: parseInt(id)
             }
         })
         if (!validatePetugas) { return res.status(400).json({ status: 400, message: 'Petugas tidak ditemukan' }) }
-        const deletePetugas = await primsa.petugas.delete({
+        const deletePetugas = await prisma.petugas.delete({
             where: {
                 idPetugas: parseInt(id)
             }
@@ -67,7 +67,7 @@ const showPetugas = async (req, res) => {
             qPage = page
         }
 
-        const getPetugas = await primsa.petugas.findMany({
+        const getPetugas = await prisma.petugas.findMany({
             skip: (qPage - 1) * 10,
             take: 10,
             orderBy: {
@@ -75,7 +75,7 @@ const showPetugas = async (req, res) => {
             }
         })
 
-        const pagination = { total_page: Math.ceil(await primsa.petugas.count() / 10), current_page: parseInt(qPage), total_data: await primsa.petugas.count() }
+        const pagination = { total_page: Math.ceil(await prisma.petugas.count() / 10), current_page: parseInt(qPage), total_data: await prisma.petugas.count() }
 
 
         return res.status(200).json({ status: 200, message: 'Data Petugas', data: getPetugas, pagination })
@@ -88,7 +88,7 @@ const showPetugas = async (req, res) => {
 const showPetugasId = async (req, res) => {
     const { id } = req.params
     try {
-        const getPetugas = await primsa.petugas.findFirst({
+        const getPetugas = await prisma.petugas.findFirst({
             where: {
                 idPetugas: parseInt(id)
             }

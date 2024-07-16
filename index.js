@@ -15,12 +15,7 @@ app.use(cors());
 
 //routes
 app.use('/admin', require('./routes/admin'));
-// const routesUser = require('./routes/user');
-// const routesWeb = require('./routes/web');
-
-// routesAdmin(app);
-// routesUser(app);
-// routesWeb(app);
+app.use('/petugas', require('./routes/petugas'));
 
 
 
