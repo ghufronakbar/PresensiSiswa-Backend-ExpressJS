@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  idAdmin      Int      @id @default(autoincrement())  
+  email        String
+  password     String
+  isSuperAdmin Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Siswa {
+  idSiswa   String   @id
+  nama      String
+  kelas     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
+
+  kehadiran Kehadiran[]
+}
+
+model Informasi {
+  idInformasi Int      @id @default(autoincrement())
+  tahunAjaran String
+  semester    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Kehadiran {
+  idKehadiran Int      @id @default(autoincrement())
+  kehadiran   String @default("")
+  tipe        String
+  waktu       DateTime @default(now())
+  tahunAjaran String
+  semester    String
+  siswa       Siswa    @relation(fields: [idSiswa], references: [idSiswa])
+  idSiswa     String
+}
+
+model Petugas {
+  idPetugas Int      @id @default(autoincrement())
+  nama      String
+  email     String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

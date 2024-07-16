@@ -1,0 +1,55 @@
+{
+  "name": "presensi-siswa",
+  "version": "1.0.0",
+  "description": "SISTEM INFORMASI PRESENSI SISWA",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "prisma generate && prisma db seed",
+    "postinstall": "prisma generate && prisma db seed"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghufronakbar/konek-aplikasi-interaktif-untuk-pemilihan-kepala-desa-umkm-dan-pengaduan-masyarakat-berbasis-web.git"
+  },
+  "keywords": [
+    "webserver",
+    "rest",
+    "api",
+    "node",
+    "js",
+    "express",
+    "mysql",
+    "desa",
+    "sistem",
+    "informasi",
+    "desa"
+  ],
+  "author": "ghufronakbar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ghufronakbar/konek-aplikasi-interaktif-untuk-pemilihan-kepala-desa-umkm-dan-pengaduan-masyarakat-berbasis-web/issues"
+  },
+  "homepage": "https://github.com/ghufronakbar/konek-aplikasi-interaktif-untuk-pemilihan-kepala-desa-umkm-dan-pengaduan-masyarakat-berbasis-web#readme",
+  "dependencies": {
+    "@prisma/client": "^5.15.1",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "ip": "^2.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "md5": "^2.3.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "prisma": "^5.15.1"
+  }
+}
