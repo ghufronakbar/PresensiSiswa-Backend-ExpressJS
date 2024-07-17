@@ -48,7 +48,6 @@ const editPassword = async (req, res) => {
     const { idAdmin } = req.decoded
     const { old_password, new_password, confirmation_password } = req.body
     try {
-        if (new_password !== confirmation_password) { return res.status(400).json({ status: 400, message: 'Konfirmasi password baru tidak sesuai' }) }
 
         if (new_password.length < 8) { return res.status(400).json({ status: 400, message: 'Password minimal 8 karakter' }) }
 
