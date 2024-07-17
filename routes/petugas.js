@@ -3,7 +3,7 @@ const router = express.Router();
 
 const petugasVerification = require('../middleware/petugasVerification');
 const { login, profile, editPassword, editProfile } = require('../controllers/petugas/account')
-const { presensi } = require('../controllers/petugas/presensi')
+const { doPresensi } = require('../controllers/petugas/presensi')
 
 // ACCOUNT
 router.post('/login', login)
@@ -12,6 +12,6 @@ router.put('/password', petugasVerification, editPassword)
 router.put('/profile', petugasVerification, editProfile)
 
 //PRESENSI
-router.post('/presensi', petugasVerification, presensi)
+router.post('/presensi', petugasVerification, doPresensi)
 
 module.exports = router

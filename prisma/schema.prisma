@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Admin {
-  idAdmin      Int      @id @default(autoincrement())  
+  idAdmin      Int      @id @default(autoincrement())
   email        String
   password     String
   isSuperAdmin Boolean  @default(false)
@@ -23,12 +23,13 @@ model Admin {
 }
 
 model Siswa {
-  idSiswa   String   @id
-  nama      String
-  kelas     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  isDeleted Boolean  @default(false)
+  idSiswa    String   @id
+  nama       String
+  kelas      String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  isDeleted  Boolean  @default(false)
+  noOrangtua String
 
   kehadiran Kehadiran[]
 }
@@ -43,7 +44,7 @@ model Informasi {
 
 model Kehadiran {
   idKehadiran Int      @id @default(autoincrement())
-  kehadiran   String @default("")
+  kehadiran   String   @default("")
   tipe        String
   waktu       DateTime @default(now())
   tahunAjaran String

@@ -31,11 +31,15 @@ const showSiswa = async (req, res) => {
 }
 
 const createSiswa = async (req, res) => {
-    const { idSiswa, nama, kelas } = req.body
+    const { idSiswa, nama, kelas, noOrangTua } = req.body
     try {
         if (!idSiswa) { return res.status(400).json({ status: 400, message: 'ID siswa harus diisi' }) }
         if (!nama) { return res.status(400).json({ status: 400, message: 'Nama harus diisi' }) }
         if (!kelas) { return res.status(400).json({ status: 400, message: 'Kelas harus diisi' }) }
+        if (!noOrangTua) { return res.status(400).json({ status: 400, message: 'No. Orang Tua harus diisi' }) }
+
+        // VALIDASI NOMOR TIDAK BOLEH ADA 0 DI DEPAN
+        if (noOrangTua[0] === '0') { return res.status(400).json({ status: 400, message: 'No. Orang Tua tidak boleh ada 0 di depan' }) }        
 
         const validateSiswa = await prisma.siswa.findFirst({
             where: {
@@ -51,7 +55,8 @@ const createSiswa = async (req, res) => {
             data: {
                 idSiswa: idSiswa,
                 nama,
-                kelas
+                kelas,
+                noOrangtua : noOrangTua
             }
         })
 
