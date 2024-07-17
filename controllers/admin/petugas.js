@@ -2,9 +2,9 @@ const prisma = require('../../db/prisma')
 const md5 = require('md5')
 
 const createPetugas = async (req, res) => {
-    const { nama, email } = req.body
+    const { nama, email, password } = req.body
     try {
-        if (!email || !nama) { return res.status(400).json({ status: 400, message: 'Email dan nama harus diisi' }) }
+        if (!email || !nama || !password) { return res.status(400).json({ status: 400, message: 'Email, nama, dan password harus diisi' }) }
         const validatePetugas = await prisma.petugas.findMany({
             where: {
                 email
@@ -23,12 +23,12 @@ const createPetugas = async (req, res) => {
         const createPetugas = await prisma.petugas.create({
             data: {
                 email,
-                password: md5('12345678'),
+                password: md5(password),
                 nama
             }
         })
 
-        return res.status(200).json({ status: 200, message: 'Petugas berhasil dibuat', email, password: '12345678' })
+        return res.status(200).json({ status: 200, message: 'Petugas berhasil dibuat', email, password })
 
     } catch (error) {
         console.log(error)
