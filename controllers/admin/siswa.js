@@ -46,7 +46,7 @@ const createSiswa = async (req, res) => {
 
         const validateSiswa = await prisma.siswa.findFirst({
             where: {
-                idSiswa: idSiswa
+                idSiswa: idSiswa,
             }
         })
 
@@ -129,7 +129,7 @@ const deleteSiswa = async (req, res) => {
 
 const editSiswa = async (req, res) => {
     const { id } = req.params
-    const { updatedId, nama, kelas } = req.body
+    const { updatedId, nama, kelas, noOrangTua } = req.body
     try {
         if (!updatedId) { return res.status(400).json({ status: 400, message: 'ID siswa harus diisi' }) }
         if (!nama) { return res.status(400).json({ status: 400, message: 'Nama harus diisi' }) }
@@ -164,7 +164,8 @@ const editSiswa = async (req, res) => {
             data: {
                 idSiswa: updatedId,
                 nama,
-                kelas
+                kelas,
+                noOrangtua: noOrangTua
             }
         })
 
