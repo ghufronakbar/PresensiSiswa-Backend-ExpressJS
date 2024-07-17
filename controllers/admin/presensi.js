@@ -193,10 +193,11 @@ const makeAllPresensiHadir = async (req, res) => {
 
         const now = new Date()
         const dateNow = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2);
+        const dateNowPlusOne = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + (now.getDate() + 1)).slice(-2);
 
-        if (tanggal > dateNow) {
-            return res.status(400).json({ status: 400, message: 'Tidak boleh melebihi tanggal hari ini' });
-        }
+        if (tanggal > dateNowPlusOne) {
+            return res.status(400).json({ status: 400, message: 'Tidak boleh edit melebihi tanggal hari ini' });
+        }    
 
 
         const valueTipe = tipe.toUpperCase();
