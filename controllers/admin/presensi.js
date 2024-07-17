@@ -43,7 +43,7 @@ const showPresensi = async (req, res) => {
             }
         });
 
-        const summary = { H: 0, A: 0, I: 0, TK: 0 };
+        const summary = { H: 0, A: 0, I: 0, S: 0, TK: 0 };
         const data = siswaData.map((siswa, index) => {
             const kehadiran = siswa.kehadiran.find(k => !queryTipe || k.tipe === queryTipe); // Asumsikan satu presensi per hari dengan tipe yang sesuai
             if (kehadiran) {
@@ -93,8 +93,8 @@ const editPresensi = async (req, res) => {
         if (!kehadiran) {
             return res.status(400).json({ status: 400, message: 'Kehadiran harus diisi' });
         }
-        if (kehadiran !== 'H' && kehadiran !== 'A' && kehadiran !== 'I') {
-            return res.status(400).json({ status: 400, message: 'Kehadiran harus H/A/I' });
+        if (kehadiran !== 'H' && kehadiran !== 'A' && kehadiran !== 'I' && kehadiran !== 'S') {
+            return res.status(400).json({ status: 400, message: 'Kehadiran harus H/A/I/S' });
         }
         if (!tanggal) {
             return res.status(400).json({ status: 400, message: 'Tanggal harus diisi' });
@@ -108,7 +108,7 @@ const editPresensi = async (req, res) => {
 
         const now = new Date()
         const dateNow = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2);
-       
+
         if (tanggal > dateNow) {
             return res.status(400).json({ status: 400, message: 'Tidak boleh melebihi tanggal hari ini' });
         }
@@ -192,7 +192,7 @@ const makeAllPresensiHadir = async (req, res) => {
 
         const now = new Date()
         const dateNow = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2);
-       
+
         if (tanggal > dateNow) {
             return res.status(400).json({ status: 400, message: 'Tidak boleh melebihi tanggal hari ini' });
         }

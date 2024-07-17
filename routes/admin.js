@@ -7,7 +7,8 @@ const { showAdmin, showAdminId, createAdmin, deleteAdmin } = require('../control
 const { createPetugas, deletePetugas, showPetugas, showPetugasId } = require('../controllers/admin/petugas')
 const { showSiswa, createSiswa, showSiswaId, deleteSiswa, editSiswa } = require('../controllers/admin/siswa')
 const { showPresensi, editPresensi, makeAllPresensiHadir } = require('../controllers/admin/presensi')
-const { showKelas } = require('../controllers/admin/kelas')
+const { showKelas } = require('../controllers/admin/kelas');
+const { dashboard } = require('../controllers/admin/dashboard');
 
 // ACCOUNT
 router.post('/login', login)
@@ -40,5 +41,8 @@ router.post('/presensi', adminVerification, makeAllPresensiHadir)
 
 // KELAS
 router.get('/kelas', adminVerification, showKelas)
+
+// DASHBOARD
+router.get('/dashboard', adminVerification, dashboard)
 
 module.exports = router
