@@ -6,7 +6,7 @@ const { login, profile, editPassword } = require('../controllers/admin/account')
 const { showAdmin, showAdminId, createAdmin, deleteAdmin } = require('../controllers/admin/management')
 const { createPetugas, deletePetugas, showPetugas, showPetugasId } = require('../controllers/admin/petugas')
 const { showSiswa, createSiswa, showSiswaId, deleteSiswa, editSiswa } = require('../controllers/admin/siswa')
-const { showPresensi } = require('../controllers/admin/presensi')
+const { showPresensi, editPresensi } = require('../controllers/admin/presensi')
 const { showKelas } = require('../controllers/admin/kelas')
 
 // ACCOUNT
@@ -35,6 +35,7 @@ router.delete('/siswa/:id', adminVerification, deleteSiswa)
 
 // PRESENSI
 router.get('/presensi', adminVerification, showPresensi)
+router.put('/presensi/:id', adminVerification, editPresensi)
 
 // KELAS
 router.get('/kelas', adminVerification, showKelas)
