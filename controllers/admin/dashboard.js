@@ -49,7 +49,7 @@ const dashboard = async (req, res) => {
         });
 
         const data = siswaData.map((siswa, index) => {
-            const kehadiran = siswa.kehadiran.find(k => !queryTipe || k.tipe === queryTipe); // Asumsikan satu presensi per hari dengan tipe yang sesuai
+            const kehadiran = siswa.kehadiran.find(k => "MASUK");
             if (kehadiran) {
                 summary[kehadiran.kehadiran]++;
             } else {
