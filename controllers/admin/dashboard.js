@@ -26,8 +26,10 @@ const dashboard = async (req, res) => {
         const summary = { H: 0, A: 0, I: 0, S: 0, TK: 0 };
 
         const now = new Date();
-        const startOfDay = now.setUTCHours(0, 0, 0, 0)
-        const endOfDay = now.setUTCHours(24, 0, 0, 0)
+        const nowIndonesian = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+
+        const startOfDay = nowIndonesian.setUTCHours(0, 0, 0, 0)
+        const endOfDay = nowIndonesian.setUTCHours(24, 0, 0, 0)
 
         const startISO = new Date(startOfDay).toISOString();
         const endISO = new Date(endOfDay).toISOString();
