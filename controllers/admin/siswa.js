@@ -1,8 +1,13 @@
 const prisma = require('../../db/prisma')
 
 const showSiswa = async (req, res) => {
-    const { page } = req.query
+    const { page, kelas } = req.query
     try {
+        const where = { isDeleted: false }
+
+        if (kelas) {
+            where.kelas = kelas
+        }
         let qPage = 1
 
         if (page) {
@@ -15,12 +20,10 @@ const showSiswa = async (req, res) => {
             orderBy: {
                 idSiswa: 'desc'
             },
-            where: {
-                isDeleted: false
-            },
+            where
         })
 
-        const pagination = { total_page: Math.ceil(await prisma.siswa.count() / 10), current_page: parseInt(qPage), total_data: await prisma.siswa.count() }
+        const pagination = { total_page: Math.ceil(await prisma.siswa.count() / 10), current_page: parseInt(qPage), total_data: await prisma.siswa.count({ where }) }
 
         return res.status(200).json({ status: 200, message: 'Data Siswa', data: getSiswa, pagination })
 
@@ -39,7 +42,7 @@ const createSiswa = async (req, res) => {
         if (!noOrangTua) { return res.status(400).json({ status: 400, message: 'No. Orang Tua harus diisi' }) }
 
         // VALIDASI NOMOR TIDAK BOLEH ADA 0 DI DEPAN
-        if (noOrangTua[0] === '0') { return res.status(400).json({ status: 400, message: 'No. Orang Tua tidak boleh ada 0 di depan' }) }        
+        if (noOrangTua[0] === '0') { return res.status(400).json({ status: 400, message: 'No. Orang Tua tidak boleh ada 0 di depan' }) }
 
         const validateSiswa = await prisma.siswa.findFirst({
             where: {
@@ -56,7 +59,7 @@ const createSiswa = async (req, res) => {
                 idSiswa: idSiswa,
                 nama,
                 kelas,
-                noOrangtua : noOrangTua
+                noOrangtua: noOrangTua
             }
         })
 
