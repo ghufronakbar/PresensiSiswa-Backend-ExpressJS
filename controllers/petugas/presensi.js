@@ -25,7 +25,7 @@ const doPresensi = async (req, res) => {
 
         if (now.hour() >= 6 && now.hour() < 9) {
             tipe = 'MASUK';
-        } else if (now.hour() >= 12 && now.hour() < 15) {
+        } else if (now.hour() >= 12 && now.hour() < 23) {
             tipe = 'KELUAR';
         } else {
             return res.status(400).json({ status: 400, message: 'Waktu presensi tidak valid!' });
