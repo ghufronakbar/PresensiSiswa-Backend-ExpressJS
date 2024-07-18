@@ -137,7 +137,7 @@ const deleteSiswa = async (req, res) => {
     try {
         const getSiswa = await prisma.siswa.findFirst({
             where: {
-                idSiswa: id
+                idSiswa: id                
             }
         })
 

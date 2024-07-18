@@ -5,7 +5,10 @@ const showKelas = async (req, res) => {
         const findKelas = await prisma.siswa.findMany({
             select: {
                 kelas: true
+            },where:{
+                isDeleted: false
             }
+
         })
 
         // FILTER UNIQUE KELAS
