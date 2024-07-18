@@ -16,6 +16,11 @@ const editInformasi = async (req, res) => {
     try {
         if(!tahunAjaran || !semester) { return res.status(400).json({ status: 400, message: 'Tahun Ajaran dan semester harus diisi' }) }
         if(semester!= "GANJIL" && semester!= "GENAP") { return res.status(400).json({ status: 400, message: 'Semester harus ganjil atau genap' }) }
+
+        const splitTahunAjaran = tahunAjaran.split('/')
+        if(parseInt(splitTahunAjaran[1]) != parseInt(splitTahunAjaran[0]+1)){
+            return res.status(400).json({ status: 400, message: 'Tahun Ajaran harus sesuai format' })
+        }
         
         const editData = await prisma.informasi.updateMany({
             data: {
