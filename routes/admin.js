@@ -9,6 +9,7 @@ const { showSiswa, createSiswa, showSiswaId, deleteSiswa, editSiswa } = require(
 const { showPresensi, editPresensi, makeAllPresensiHadir } = require('../controllers/admin/presensi')
 const { showKelas } = require('../controllers/admin/kelas');
 const { dashboard } = require('../controllers/admin/dashboard');
+const { getInformasi, editInformasi } = require('../controllers/admin/informasi');
 
 // ACCOUNT
 router.post('/login', login)
@@ -44,5 +45,9 @@ router.get('/kelas', adminVerification, showKelas)
 
 // DASHBOARD
 router.get('/dashboard', adminVerification, dashboard)
+
+// INFORMASI
+router.get('/informasi', adminVerification, getInformasi)
+router.put('/informasi', adminVerification, editInformasi)
 
 module.exports = router
