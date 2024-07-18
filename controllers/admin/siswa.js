@@ -73,7 +73,15 @@ const createSiswa = async (req, res) => {
 
 const showSiswaId = async (req, res) => {
     const { id } = req.params
+    const { tipe } = req.query
     try {
+
+        let queryTipe = ''
+
+        if (tipe) {
+            queryTipe = tipe.toUpperCase()
+        }
+
         const getSiswa = await prisma.siswa.findFirst({
             where: {
                 idSiswa: id,
@@ -81,6 +89,11 @@ const showSiswaId = async (req, res) => {
             },
             include: {
                 kehadiran: {
+                    where: {
+                        tipe: {
+                            contains: queryTipe
+                        }
+                    },
                     orderBy: {
                         waktu: 'desc'
                     }
