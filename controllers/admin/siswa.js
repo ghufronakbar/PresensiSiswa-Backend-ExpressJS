@@ -72,44 +72,65 @@ const createSiswa = async (req, res) => {
 }
 
 const showSiswaId = async (req, res) => {
-    const { id } = req.params
-    const { tipe } = req.query
+    const { id } = req.params;
+    const { tipe } = req.query;
     try {
-
-        let queryTipe = ''
+        let queryTipe = '';
 
         if (tipe) {
-            queryTipe = tipe.toUpperCase()
+            queryTipe = tipe.toUpperCase();
         }
 
         const getSiswa = await prisma.siswa.findFirst({
             where: {
                 idSiswa: id,
-                isDeleted: false
+                isDeleted: false,
             },
             include: {
                 kehadiran: {
                     where: {
                         tipe: {
-                            contains: queryTipe
-                        }
+                            contains: queryTipe,
+                        },
                     },
                     orderBy: {
-                        waktu: 'desc'
-                    }
-                }
+                        waktu: 'desc',
+                    },
+                },
+            },
+        });
+
+        if (!getSiswa) {
+            return res.status(404).json({ status: 404, message: 'Siswa tidak ditemukan' });
+        }
+
+        // Menghitung total kehadiran berdasarkan tipe
+        const totalKehadiran = getSiswa.kehadiran.reduce((acc, curr) => {
+            acc[curr.kehadiran] = (acc[curr.kehadiran] || 0) + 1;
+            return acc;
+        }, {});
+
+        // Menambahkan default 0 jika tipe kehadiran tidak ada dalam data
+        ['H', 'I', 'S', 'A'].forEach((key) => {
+            if (!totalKehadiran[key]) {
+                totalKehadiran[key] = 0;
             }
-        })
+        });
 
-        if (!getSiswa) { return res.status(404).json({ status: 404, message: 'Siswa tidak ditemukan' }) }
-
-        return res.status(200).json({ status: 200, message: 'Data Siswa', data: getSiswa })
-
+        return res.status(200).json({
+            status: 200,
+            message: 'Data Siswa',
+            data: {
+                ...getSiswa,
+                totalKehadiran,
+            },
+        });
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({ status: 500, message: "Internal Server Error" })
+        console.log(error);
+        return res.status(500).json({ status: 500, message: 'Internal Server Error' });
     }
-}
+};
+
 
 const deleteSiswa = async (req, res) => {
     const { id } = req.params
