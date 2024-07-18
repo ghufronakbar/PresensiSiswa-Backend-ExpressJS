@@ -14,6 +14,9 @@ const getInformasi = async (req, res) => {
 const editInformasi = async (req, res) => {
     const { tahunAjaran, semester } = req.body
     try {
+        if(!tahunAjaran || !semester) { return res.status(400).json({ status: 400, message: 'Tahun Ajaran dan semester harus diisi' }) }
+        if(semester!= "GANJIL" && semester!= "GENAP") { return res.status(400).json({ status: 400, message: 'Semester harus ganjil atau genap' }) }
+        
         const editData = await prisma.informasi.updateMany({
             data: {
                 tahunAjaran,
