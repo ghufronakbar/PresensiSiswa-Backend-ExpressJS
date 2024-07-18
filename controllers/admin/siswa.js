@@ -18,7 +18,7 @@ const showSiswa = async (req, res) => {
             skip: (qPage - 1) * 10,
             take: 10,
             orderBy: {
-                idSiswa: 'desc'
+                createdAt: 'desc'
             },
             where
         })

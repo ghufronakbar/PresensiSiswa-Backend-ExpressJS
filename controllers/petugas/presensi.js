@@ -76,6 +76,7 @@ const doPresensi = async (req, res) => {
                 idSiswa
             },
             select: {
+                idSiswa: true,
                 noOrangtua: true,
                 nama: true,
             }
@@ -86,7 +87,7 @@ const doPresensi = async (req, res) => {
             await sendWhatsappMessage(getContact.noOrangtua, whatsappMessage);
         }
 
-        return res.status(200).json({ status: 200, message: `Presensi ${tipe.toLowerCase()} berhasil dilakukan`, data: presensi });
+        return res.status(200).json({ status: 200, message: `Presensi ${tipe.toLowerCase()} berhasil dilakukan`, data: getContact });
 
     } catch (error) {
         console.log(error);
