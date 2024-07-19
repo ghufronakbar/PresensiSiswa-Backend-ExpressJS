@@ -1,6 +1,25 @@
 const prisma = require('../../db/prisma')
 const axios = require('axios');
 
+function getNowISO() {
+    const date = new Date();
+    date.setHours(date.getHours() + 7); // Menambahkan offset +7 jam
+    return date.toISOString(); // Mengembalikan tanggal saat ini dalam ISO string dengan offset +7 jam
+}
+
+function getStartOfDayISO() {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0); // Set jam, menit, detik, dan milidetik menjadi 00:00:00
+    date.setHours(date.getHours() + 7); // Menambahkan offset +7 jam
+    return date.toISOString(); // Mengembalikan awal hari ini dalam ISO string dengan offset +7 jam
+}
+
+function getEndOfDayISO() {
+    const date = new Date();
+    date.setHours(23, 59, 59, 999); // Set jam, menit, detik, dan milidetik menjadi 23:59:59.999
+    date.setHours(date.getHours() + 7); // Menambahkan offset +7 jam
+    return date.toISOString(); // Mengembalikan akhir hari ini dalam ISO string dengan offset +7 jam
+}
 
 const doPresensi = async (req, res) => {
     const { idSiswa } = req.body;
@@ -18,31 +37,21 @@ const doPresensi = async (req, res) => {
             return res.status(400).json({ status: 400, message: 'Siswa sudah dihapus!' });
         }
 
-        // Mendapatkan waktu sekarang di zona waktu Indonesia tanpa library tambahan
-        const now = new Date();
-        now.setHours(now.getHours() + 7);  // Menambahkan 7 jam untuk Waktu Indonesia Barat (WIB)
-        const now2 = new Date();
-        
-        const startOfDay = new Date(now2);
-        startOfDay.setHours(7,0,0,0); // Awal hari di WIB
+        const nowISO = getNowISO();
+        const startOfDayISO = getStartOfDayISO();
+        const endOfDayISO = getEndOfDayISO();
+        const hour = nowISO.slice(11, 13)
 
-        const endOfDay = new Date(now2);
-        endOfDay.setHours(30, 59, 0, 0); // Akhir hari di WIB
-
-        console.log({now});
-        console.log({startOfDay});
-        console.log({endOfDay});
 
         let tipe = '';
-
-
-        const hour = now2.getHours();
-
         console.log(hour)
+        console.log(nowISO)
+        console.log(startOfDayISO)
+        console.log(endOfDayISO)
 
-        if (hour >= 6 && hour < 9) {
+        if (hour >= 0 && hour < 12) {
             tipe = 'MASUK';
-        } else if (hour >= 12 && hour < 15) {
+        } else if (hour >= 12 && hour < 24) {
             tipe = 'KELUAR';
         } else {
             return res.status(400).json({ status: 400, message: 'Waktu presensi tidak valid!' });
@@ -51,11 +60,10 @@ const doPresensi = async (req, res) => {
         const validatePresensi = await prisma.kehadiran.findFirst({
             where: {
                 idSiswa,
-                tipe,
-                // Mengecek presensi di hari yang sama
+                tipe,                
                 waktu: {
-                    gte: startOfDay,
-                    lt: endOfDay
+                    gte: startOfDayISO,
+                    lt: endOfDayISO
                 }
             }
         });
@@ -70,7 +78,6 @@ const doPresensi = async (req, res) => {
         }
         const { semester, tahunAjaran } = informasiAjaran;
 
-        const isoDate = now.toISOString();
 
         const presensi = await prisma.kehadiran.create({
             data: {
@@ -79,7 +86,7 @@ const doPresensi = async (req, res) => {
                 tipe: tipe.toUpperCase(),
                 semester: semester.toUpperCase(),
                 tahunAjaran,
-                waktu: isoDate
+                waktu: nowISO
             }
         });
 
@@ -95,7 +102,7 @@ const doPresensi = async (req, res) => {
         });
 
         if (getContact && getContact.noOrangtua) {
-            const whatsappMessage = `Halo, Orang Tua/Wali dari ${validateSiswa.nama},\n\nAnak Anda telah melakukan presensi *${tipe.toLowerCase()}* pada tanggal *${now.toISOString().split('T')[0]}* jam *${now.toTimeString().split(' ')[0]}*.`;
+            const whatsappMessage = `Halo, Orang Tua/Wali dari ${validateSiswa.nama},\n\nAnak Anda telah melakukan presensi *${tipe.toLowerCase()}* pada tanggal *${nowISO.split('T')[0]}* jam *${nowISO.slice(11, 16)}*.`;
             await sendWhatsappMessage(getContact.noOrangtua, whatsappMessage);
         }
 
