@@ -1,20 +1,20 @@
 const prisma = require('../../db/prisma')
 const axios = require('axios');
 
-function getNowISO() {
+const getNowISO = () => {
     const date = new Date();
     date.setHours(date.getHours() + 7); // Menambahkan offset +7 jam
     return date.toISOString(); // Mengembalikan tanggal saat ini dalam ISO string dengan offset +7 jam
 }
 
-function getStartOfDayISO() {
+const getStartOfDayISO = () => {
     const date = new Date();
     date.setHours(0, 0, 0, 0); // Set jam, menit, detik, dan milidetik menjadi 00:00:00
     date.setHours(date.getHours() + 7); // Menambahkan offset +7 jam
     return date.toISOString(); // Mengembalikan awal hari ini dalam ISO string dengan offset +7 jam
 }
 
-function getEndOfDayISO() {
+const getEndOfDayISO = () => {
     const date = new Date();
     date.setHours(23, 59, 59, 999); // Set jam, menit, detik, dan milidetik menjadi 23:59:59.999
     date.setHours(date.getHours() + 7); // Menambahkan offset +7 jam
