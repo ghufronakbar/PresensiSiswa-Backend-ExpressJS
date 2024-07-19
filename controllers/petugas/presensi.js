@@ -120,7 +120,7 @@ const sendWhatsappMessage = async (phone, message) => {
         const response = await axios.post('https://api.fonnte.com/send', {
             target: phone,
             message: message,
-            countryCode: '62' // Country code for Indonesia
+            countryCode: '62' 
         }, {
             headers: {
                 'Authorization': process.env.FONNTE_API_KEY,
