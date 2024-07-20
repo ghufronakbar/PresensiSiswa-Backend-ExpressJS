@@ -23,7 +23,7 @@ const showSiswa = async (req, res) => {
             where
         })
 
-        const pagination = { total_page: Math.ceil(await prisma.siswa.count() / 10), current_page: parseInt(qPage), total_data: await prisma.siswa.count({ where }) }
+        const pagination = { total_page: Math.ceil(await prisma.siswa.count({ where }) / 10), current_page: parseInt(qPage), total_data: await prisma.siswa.count({ where }) }
 
         return res.status(200).json({ status: 200, message: 'Data Siswa', data: getSiswa, pagination })
 
