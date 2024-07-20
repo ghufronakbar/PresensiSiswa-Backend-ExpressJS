@@ -16,7 +16,11 @@ const showKelas = async (req, res) => {
             .map((item) => item.kelas)
             .filter((value, index, self) => self.indexOf(value) === index)
 
-        return res.status(200).json({ status: 200, message: 'Data Kelas', data: uniqueKelas })
+        // UPDATE KELAS MENJADI STATIC
+
+        const listKelas = ["1", "2", "3", "4", "5", "6"]
+
+        return res.status(200).json({ status: 200, message: 'Data Kelas', data: listKelas })
 
     } catch (error) {
         console.log(error)
